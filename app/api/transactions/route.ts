@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockTransactions: any[] = [];
+import { mockDb } from '@/data/mock-db';
 
 export async function GET() {
+  const transactions = mockDb.transactions.getAll();
   return NextResponse.json({
-    data: mockTransactions,
+    data: transactions,
     message: 'Transacciones obtenidas exitosamente',
   });
 }
@@ -14,16 +13,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const newTransaction = {
-      id: Date.now().toString(),
+      id: `t${Date.now()}`,
       ...body,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
-    mockTransactions.push(newTransaction);
+    const created = mockDb.transactions.add(newTransaction);
 
     return NextResponse.json({
-      data: newTransaction,
+      data: created,
       message: 'Transacción creada exitosamente',
     });
   } catch {

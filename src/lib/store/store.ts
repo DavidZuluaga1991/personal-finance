@@ -1,2 +1,3 @@
-export type RootState = Record<string, never>;
+export * from './slices/authSlice';
+export * from './slices/transactionSlice';
 

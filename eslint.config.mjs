@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     // Jest config files
     "jest.config.js",
     "jest.setup.js",
+    // JSON Server
+    "api/**",
   ]),
 ]);
 

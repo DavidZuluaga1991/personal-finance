@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockTransactions: any[] = [];
+import { mockDb } from '@/data/mock-db';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const transaction = mockTransactions.find((t) => t.id === params.id);
+  const transaction = mockDb.transactions.getById(params.id);
 
   if (!transaction) {
     return NextResponse.json(
@@ -28,23 +26,20 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const index = mockTransactions.findIndex((t) => t.id === params.id);
+    const updated = mockDb.transactions.update(params.id, {
+      ...body,
+      updatedAt: new Date().toISOString(),
+    });
 
-    if (index === -1) {
+    if (!updated) {
       return NextResponse.json(
         { message: 'Transacción no encontrada' },
         { status: 404 }
       );
     }
 
-    mockTransactions[index] = {
-      ...mockTransactions[index],
-      ...body,
-      updatedAt: new Date().toISOString(),
-    };
-
     return NextResponse.json({
-      data: mockTransactions[index],
+      data: updated,
       message: 'Transacción actualizada exitosamente',
     });
   } catch {
@@ -59,16 +54,14 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const index = mockTransactions.findIndex((t) => t.id === params.id);
+  const deleted = mockDb.transactions.delete(params.id);
 
-  if (index === -1) {
+  if (!deleted) {
     return NextResponse.json(
       { message: 'Transacción no encontrada' },
       { status: 404 }
     );
   }
-
-  mockTransactions.splice(index, 1);
 
   return NextResponse.json({
     message: 'Transacción eliminada exitosamente',

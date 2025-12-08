@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@test.com",
+      "password": "123456",
+      "name": "Administrador",
+      "avatar": "https://i.pravatar.cc/150?img=1"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "t1",
+      "title": "Monthly Salary",
+      "amount": 3500,
+      "type": "income",
+      "category": "salary",
+      "date": "2024-01-01"
+    },
+    {
+      "id": "t2",
+      "title": "Restaurant dinner",
+      "amount": 45,
+      "type": "expense",
+      "category": "food",
+      "date": "2024-01-03"
+    },
+    {
+      "id": "t3",
+      "title": "Uber ride",
+      "amount": 18,
+      "type": "expense",
+      "category": "transport",
+      "date": "2024-01-05"
+    },
+    {
+      "id": "t4",
+      "title": "Netflix subscription",
+      "amount": 15,
+      "type": "expense",
+      "category": "entertainment",
+      "date": "2024-01-10"
+    },
+    {
+      "id": "t5",
+      "title": "Freelance project",
+      "amount": 800,
+      "type": "income",
+      "category": "other",
+      "date": "2024-01-15"
+    },
+    {
+      "id": "t6",
+      "title": "Grocery shopping",
+      "amount": 120,
+      "type": "expense",
+      "category": "food",
+      "date": "2024-01-20"
+    }
+  ]
+}
+

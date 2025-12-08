@@ -52,7 +52,16 @@ class ApiClient {
 
   private getAuthToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('auth_token');
+    try {
+      const authStorage = localStorage.getItem('auth-storage');
+      if (authStorage) {
+        const parsed = JSON.parse(authStorage);
+        return parsed?.state?.token || null;
+      }
+    } catch {
+      return null;
+    }
+    return null;
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
