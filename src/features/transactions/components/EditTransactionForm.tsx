@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { useToast } from '@/contexts/ToastContext';
-import type { TransactionFormData, TransactionType, Transaction } from '../types';
+import type { TransactionFormData, TransactionType, Transaction } from '../types/transaction.types';
 import { TRANSACTION_CATEGORIES, CATEGORY_LABELS } from '@/lib/utils/constants';
 import { transactionFormSchema } from '../schemas/transaction.schema';
 
@@ -61,7 +61,7 @@ export function EditTransactionForm({
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
-        error.errors.forEach((err) => {
+        error.issues.forEach((err) => {
           if (err.path[0]) {
             fieldErrors[err.path[0].toString()] = err.message;
           }

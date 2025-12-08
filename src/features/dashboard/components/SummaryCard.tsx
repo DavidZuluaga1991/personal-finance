@@ -6,6 +6,7 @@ interface SummaryCardProps {
   icon?: 'income' | 'expense' | 'balance';
   subtitle?: string;
   isHighlighted?: boolean;
+  valueColor?: 'red' | 'green';
 }
 
 export default function SummaryCard({

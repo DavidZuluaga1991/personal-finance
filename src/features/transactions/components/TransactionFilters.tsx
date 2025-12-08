@@ -1,7 +1,7 @@
 'use client';
 
 import { Filter, ArrowUpDown, Plus } from 'lucide-react';
-import type { TransactionType, SortField, SortOrder } from '../types';
+import type { TransactionType, SortField, SortOrder } from '../types/transaction.types';
 
 interface TransactionFiltersProps {
   filterType: TransactionType | 'all';

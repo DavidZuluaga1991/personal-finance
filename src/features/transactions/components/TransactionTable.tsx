@@ -1,7 +1,7 @@
 'use client';
 
 import { Edit2, Trash2 } from 'lucide-react';
-import type { Transaction } from '../types';
+import type { Transaction } from '../types/transaction.types';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { CATEGORY_LABELS } from '@/lib/utils/constants';

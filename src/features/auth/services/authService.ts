@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api';
 import { endpoints } from '@/lib/api';
-import type { User } from '../types';
+import type{ User } from '../types/auth.types';
 
 export interface LoginResponse {
   token: string;

@@ -2,7 +2,7 @@
 
 import { transactionService } from '../services/transactionService';
 import { useTransactionStore } from '@/lib/store/slices/transactionSlice';
-import type { TransactionFormData } from '../types';
+import { TransactionFormData } from '../types/transaction.types';
 
 export const useCreateTransaction = () => {
   const add = useTransactionStore((s) => s.add);

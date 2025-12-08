@@ -15,26 +15,24 @@ export const transactionFormSchema = z.object({
     .refine((val) => val > 0, {
       message: 'Amount must be greater than 0',
     }),
-  type: z.enum([TRANSACTION_TYPES.INCOME, TRANSACTION_TYPES.EXPENSE], {
-    errorMap: () => ({ message: 'Type must be either income or expense' }),
-  }),
-  category: z.enum(
-    [
-      TRANSACTION_CATEGORIES.SALARY,
-      TRANSACTION_CATEGORIES.FREELANCE,
-      TRANSACTION_CATEGORIES.INVESTMENT,
-      TRANSACTION_CATEGORIES.FOOD,
-      TRANSACTION_CATEGORIES.TRANSPORT,
-      TRANSACTION_CATEGORIES.ENTERTAINMENT,
-      TRANSACTION_CATEGORIES.SUBSCRIPTIONS,
-      TRANSACTION_CATEGORIES.SHOPPING,
-      TRANSACTION_CATEGORIES.HEALTH,
-      TRANSACTION_CATEGORIES.OTHER,
-    ],
-    {
-      errorMap: () => ({ message: 'Invalid category' }),
-    }
-  ),
+  type: z
+  .enum([TRANSACTION_TYPES.INCOME, TRANSACTION_TYPES.EXPENSE])
+  .describe("Type must be either income or expense"),
+
+category: z
+  .enum([
+    TRANSACTION_CATEGORIES.SALARY,
+    TRANSACTION_CATEGORIES.FREELANCE,
+    TRANSACTION_CATEGORIES.INVESTMENT,
+    TRANSACTION_CATEGORIES.FOOD,
+    TRANSACTION_CATEGORIES.TRANSPORT,
+    TRANSACTION_CATEGORIES.ENTERTAINMENT,
+    TRANSACTION_CATEGORIES.SUBSCRIPTIONS,
+    TRANSACTION_CATEGORIES.SHOPPING,
+    TRANSACTION_CATEGORIES.HEALTH,
+    TRANSACTION_CATEGORIES.OTHER,
+  ])
+  .describe("Invalid category"),
   date: z
     .string()
     .min(1, 'Date is required')

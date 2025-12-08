@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/api';
 import { endpoints } from '@/lib/api';
-import type { Transaction, TransactionFormData } from '../types';
+import { Transaction, TransactionFormData } from '../types/transaction.types';
 
 export const transactionService = {
   list: async (): Promise<Transaction[]> => {

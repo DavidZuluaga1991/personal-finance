@@ -21,7 +21,7 @@ interface Transaction {
 }
 
 const users: User[] = [...dbData.users];
-const transactions: Transaction[] = [...dbData.transactions];
+const transactions: Transaction[] = [...dbData.transactions] as Transaction[];
 
 export const mockDb = {
   users: {
