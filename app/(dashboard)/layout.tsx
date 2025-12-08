@@ -9,6 +9,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   useAuthCheck();
-  return <ProtectedRoute>{children}</ProtectedRoute>;
+  return (
+    <ProtectedRoute>
+      <div className="min-h-screen">{children}</div>
+    </ProtectedRoute>
+  );
 }
 

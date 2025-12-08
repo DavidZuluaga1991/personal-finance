@@ -11,14 +11,28 @@ export const TRANSACTION_TYPES = {
 } as const;
 
 export const TRANSACTION_CATEGORIES = {
+  SALARY: 'salary',
+  FREELANCE: 'freelance',
+  INVESTMENT: 'investment',
   FOOD: 'food',
   TRANSPORT: 'transport',
   ENTERTAINMENT: 'entertainment',
-  BILLS: 'bills',
+  SUBSCRIPTIONS: 'subscriptions',
   SHOPPING: 'shopping',
   HEALTH: 'health',
-  EDUCATION: 'education',
-  SALARY: 'salary',
   OTHER: 'other',
 } as const;
+
+export const CATEGORY_LABELS: Record<string, string> = {
+  salary: 'Salary',
+  freelance: 'Freelance',
+  investment: 'Investment',
+  food: 'Food',
+  transport: 'Transport',
+  entertainment: 'Entertainment',
+  subscriptions: 'Subscriptions',
+  shopping: 'Shopping',
+  health: 'Health',
+  other: 'Other',
+};
 

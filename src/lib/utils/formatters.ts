@@ -1,19 +1,19 @@
 import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale/es';
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency: 'USD',
   }).format(amount);
 }
 
-export function formatDate(date: string | Date, formatStr: string = 'dd/MM/yyyy'): string {
+export function formatDate(date: string | Date): string {
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
-  return format(dateObj, formatStr, { locale: es });
+  return format(dateObj, 'MMM dd, yyyy');
 }
 
 export function formatDateFull(date: string | Date): string {
-  return formatDate(date, 'dd/MM/yyyy HH:mm');
+  const dateObj = typeof date === 'string' ? parseISO(date) : date;
+  return format(dateObj, 'MMM dd, yyyy HH:mm');
 }
 
