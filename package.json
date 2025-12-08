@@ -10,8 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "json-server": "node api/server.js",
-    "dev:all": "concurrently -n \"NEXT,JSON\" -c \"blue,green\" \"npm run dev\" \"npm run json-server\""
+    "dev:all": "concurrently -n \"NEXT,JSON\" -c \"blue,green\" \"npm run dev\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

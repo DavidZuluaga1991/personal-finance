@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Transaction } from '@/features/transactions/types';
+import type { Transaction } from '@/features/transactions/types/transaction.types';
 
 interface TransactionState {
   list: Transaction[];

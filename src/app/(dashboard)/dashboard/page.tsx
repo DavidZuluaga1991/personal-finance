@@ -16,7 +16,8 @@ import { Modal } from '@/components/ui/modal';
 import { useToast } from '@/contexts/ToastContext';
 import { useUpdateTransaction } from '@/features/transactions/hooks/useUpdateTransaction';
 import { formatCurrency } from '@/lib/utils';
-import type { TransactionType, SortField, SortOrder } from '@/features/transactions/types';
+import { SortField, SortOrder, TransactionType } from '@/features/transactions/types/transaction.types';
+// import type { TransactionType, SortField, SortOrder } from '@/features/transactions/types';
 
 export default function DashboardPage() {
   useGetTransactions();

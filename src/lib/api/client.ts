@@ -1,5 +1,5 @@
+import type { ApiError, ApiResponse } from '@/types/common.types';
 import { endpoints } from './endpoints';
-import type { ApiResponse, ApiError } from '@/types';
 
 class ApiClient {
   private baseURL: string;
