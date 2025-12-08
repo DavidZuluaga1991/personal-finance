@@ -3,9 +3,10 @@ import { mockDb } from '@/data/mock-db';
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const transaction = mockDb.transactions.getById(params.id);
+  const { id } = await params;
+  const transaction = mockDb.transactions.getById(id);
 
   if (!transaction) {
     return NextResponse.json(
@@ -22,11 +23,12 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const updated = mockDb.transactions.update(params.id, {
+    const updated = mockDb.transactions.update(id, {
       ...body,
       updatedAt: new Date().toISOString(),
     });
@@ -52,9 +54,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const deleted = mockDb.transactions.delete(params.id);
+  const { id } = await params;
+  const deleted = mockDb.transactions.delete(id);
 
   if (!deleted) {
     return NextResponse.json(

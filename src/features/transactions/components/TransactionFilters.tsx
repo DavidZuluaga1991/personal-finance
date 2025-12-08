@@ -65,14 +65,14 @@ export function TransactionFilters({
 
         <button
           onClick={onSortOrderToggle}
-          className="px-4 py-2 rounded-lg border border-slate-800/80 bg-slate-900/60 text-slate-300 text-sm font-medium hover:bg-slate-800/60 hover:border-blue-600 transition-colors flex items-center gap-2 justify-center"
+          className="px-4 py-2 rounded-lg border border-slate-800/80 bg-slate-900/60 text-slate-300 text-sm font-medium hover:bg-slate-800/60 hover:border-blue-600 transition-colors flex items-center gap-2 justify-center cursor-pointer"
         >
           {sortOrder === 'desc' ? '↓ Desc' : '↑ Asc'}
         </button>
 
         <button
           onClick={onAddClick}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all duration-200 flex items-center gap-2 justify-center hover:shadow-md hover:shadow-blue-500/30"
+          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all duration-200 flex items-center gap-2 justify-center hover:shadow-md hover:shadow-blue-500/30 cursor-pointer"
         >
           <Plus size={16} />
           Add Transaction

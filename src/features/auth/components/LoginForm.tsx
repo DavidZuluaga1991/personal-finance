@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { useToast } from '@/src/contexts/ToastContext';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginForm() {
   const login = useLogin();
+  const { showSuccess, showError } = useToast();
   const [isPending, startTransition] = useTransition();
   const [showPass, setShowPass] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -22,8 +24,11 @@ export default function LoginForm() {
     startTransition(async () => {
       try {
         await login(formData);
+        showSuccess('Login successful', 'Welcome back!');
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error de login');
+        const errorMessage = err instanceof Error ? err.message : 'Error de login';
+        setError(errorMessage);
+        showError('Login failed', errorMessage);
       }
     });
   };
@@ -100,7 +105,7 @@ export default function LoginForm() {
                   <button
                     type="button"
                     onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-400"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-400 cursor-pointer"
                   >
                     {showPass ? (
                       <EyeOff className="h-5 w-5" />

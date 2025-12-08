@@ -11,6 +11,10 @@ import SummaryCard from '@/features/dashboard/components/SummaryCard';
 import { TransactionFilters } from '@/features/transactions/components/TransactionFilters';
 import { TransactionTable } from '@/features/transactions/components/TransactionTable';
 import { AddTransactionForm } from '@/features/transactions/components/AddTransactionForm';
+import { EditTransactionForm } from '@/features/transactions/components/EditTransactionForm';
+import { Modal } from '@/components/ui/modal';
+import { useToast } from '@/contexts/ToastContext';
+import { useUpdateTransaction } from '@/features/transactions/hooks/useUpdateTransaction';
 import { formatCurrency } from '@/lib/utils';
 import type { TransactionType, SortField, SortOrder } from '@/features/transactions/types';
 
@@ -18,6 +22,7 @@ export default function DashboardPage() {
   useGetTransactions();
   const list = useTransactionStore((s) => s.list);
   const createTransaction = useCreateTransaction();
+  const updateTransaction = useUpdateTransaction();
   const deleteTransaction = useDeleteTransaction();
 
   const [filterType, setFilterType] = useState<TransactionType | 'all'>('all');
@@ -25,6 +30,13 @@ export default function DashboardPage() {
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [showAddForm, setShowAddForm] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; id: string | null }>({
+    isOpen: false,
+    id: null,
+  });
+  const { showSuccess, showError } = useToast();
 
   const summary = useMemo(() => {
     const totalIncome = list
@@ -67,15 +79,48 @@ export default function DashboardPage() {
     try {
       await createTransaction(data);
       setShowAddForm(false);
+      showSuccess('Transaction created', 'The transaction has been added successfully.');
+    } catch (error) {
+      showError('Failed to create transaction', error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setIsCreating(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this transaction?')) {
-      await deleteTransaction(id);
+  const handleDeleteClick = (id: string) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const handleEdit = (id: string) => {
+    setEditingId(id);
+    setShowAddForm(false);
+  };
+
+  const handleUpdate = async (data: Parameters<typeof updateTransaction>[1]) => {
+    if (!editingId) return;
+
+    setIsUpdating(true);
+    try {
+      await updateTransaction(editingId, data);
+      setEditingId(null);
+      showSuccess('Transaction updated', 'The transaction has been updated successfully.');
+    } catch (error) {
+      showError('Failed to update transaction', error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setIsUpdating(false);
     }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deleteModal.id) {
+      try {
+        await deleteTransaction(deleteModal.id);
+        showSuccess('Transaction deleted', 'The transaction has been removed successfully.');
+      } catch (error) {
+        showError('Failed to delete transaction', error instanceof Error ? error.message : 'An error occurred');
+      }
+    }
+    setDeleteModal({ isOpen: false, id: null });
   };
 
   const toggleSortOrder = () => {
@@ -130,7 +175,7 @@ export default function DashboardPage() {
               transactionCount={filteredTransactions.length}
             />
 
-            {showAddForm && (
+            {showAddForm && !editingId && (
               <AddTransactionForm
                 onSubmit={handleCreate}
                 onCancel={() => setShowAddForm(false)}
@@ -138,9 +183,30 @@ export default function DashboardPage() {
               />
             )}
 
+            {editingId && (
+              <EditTransactionForm
+                transaction={list.find((t) => t.id === editingId)!}
+                onSubmit={handleUpdate}
+                onCancel={() => setEditingId(null)}
+                isLoading={isUpdating}
+              />
+            )}
+
             <TransactionTable
               transactions={filteredTransactions}
-              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onDelete={handleDeleteClick}
+            />
+
+            <Modal
+              isOpen={deleteModal.isOpen}
+              onClose={() => setDeleteModal({ isOpen: false, id: null })}
+              onConfirm={handleDeleteConfirm}
+              title="Delete Transaction"
+              description="Are you sure you want to delete this transaction? This action cannot be undone."
+              confirmText="Delete"
+              cancelText="Cancel"
+              variant="destructive"
             />
 
             <div className="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-500">

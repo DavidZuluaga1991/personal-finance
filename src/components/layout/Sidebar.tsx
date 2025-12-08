@@ -57,7 +57,7 @@ export function Sidebar() {
             <Link
               key={item.id}
               href={item.href}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium cursor-pointer ${
                 isActive
                   ? 'bg-blue-600/20 text-blue-400 border border-blue-600/40'
                   : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/30'
@@ -85,7 +85,7 @@ export function Sidebar() {
 
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/30 hover:bg-slate-800/60 transition-colors text-slate-300 hover:text-white text-sm font-medium"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-700 bg-slate-800/30 hover:bg-slate-800/60 transition-colors text-slate-300 hover:text-white text-sm font-medium cursor-pointer"
         >
           <LogOut size={16} />
           <span>Logout</span>

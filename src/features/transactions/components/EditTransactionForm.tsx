@@ -1,40 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { useToast } from '@/contexts/ToastContext';
-import type { TransactionFormData, TransactionType } from '../types';
+import type { TransactionFormData, TransactionType, Transaction } from '../types';
 import { TRANSACTION_CATEGORIES, CATEGORY_LABELS } from '@/lib/utils/constants';
 import { transactionFormSchema } from '../schemas/transaction.schema';
 
-interface AddTransactionFormProps {
+interface EditTransactionFormProps {
+  transaction: Transaction;
   onSubmit: (data: TransactionFormData) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
 }
 
-export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransactionFormProps) {
+export function EditTransactionForm({
+  transaction,
+  onSubmit,
+  onCancel,
+  isLoading,
+}: EditTransactionFormProps) {
   const { showError: showToastError } = useToast();
-  const [formData, setFormData] = useState<Omit<TransactionFormData, 'amount'> & { amount: string }>({
-    title: '',
-    amount: '',
-    type: 'expense',
-    category: 'other',
-    date: new Date().toISOString().split('T')[0],
+  const normalizeDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toISOString().split('T')[0];
+  };
+
+  const [formData, setFormData] = useState<TransactionFormData>({
+    title: transaction.title,
+    amount: transaction.amount,
+    type: transaction.type,
+    category: transaction.category,
+    date: normalizeDate(transaction.date),
+    description: transaction.description,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    setFormData({
+      title: transaction.title,
+      amount: transaction.amount,
+      type: transaction.type,
+      category: transaction.category,
+      date: normalizeDate(transaction.date),
+      description: transaction.description,
+    });
+    setErrors({});
+  }, [transaction]);
+
   const validateForm = (): boolean => {
     try {
-      const dataToValidate = {
-        ...formData,
-        amount: formData.amount === '' ? 0 : parseFloat(formData.amount) || 0,
-      };
-      transactionFormSchema.parse(dataToValidate);
+      transactionFormSchema.parse(formData);
       setErrors({});
       return true;
     } catch (error) {
@@ -61,22 +82,10 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
     }
 
     try {
-      const dataToSubmit: TransactionFormData = {
-        ...formData,
-        amount: parseFloat(formData.amount) || 0,
-      };
-      await onSubmit(dataToSubmit);
-      setFormData({
-        title: '',
-        amount: '',
-        type: 'expense',
-        category: 'other',
-        date: new Date().toISOString().split('T')[0],
-      });
-      setErrors({});
+      await onSubmit(formData);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create transaction';
-      showToastError('Failed to create transaction', errorMessage);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update transaction';
+      showToastError('Failed to update transaction', errorMessage);
     }
   };
 
@@ -94,41 +103,33 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
     });
   };
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
-      handleChange('amount', value);
-    }
-  };
-
   return (
     <div className="mb-6 p-4 rounded-lg bg-slate-900/60 border border-slate-800/80">
-      <h4 className="text-sm font-semibold text-white mb-4">Add New Transaction</h4>
+      <h4 className="text-sm font-semibold text-white mb-4">Edit Transaction</h4>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="edit-title">Title</Label>
             <Input
-              id="title"
+              id="edit-title"
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="Transaction title"
               className="bg-slate-900/70 border-slate-800/80 text-white"
               required
-              minLength={3}
-              maxLength={100}
             />
             {errors.title && <ErrorMessage message={errors.title} />}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="amount">Amount</Label>
+            <Label htmlFor="edit-amount">Amount</Label>
             <Input
-              id="amount"
-              type="text"
-              inputMode="decimal"
+              id="edit-amount"
+              type="number"
+              step="0.01"
+              min="0.01"
               value={formData.amount}
-              onChange={handleAmountChange}
+              onChange={(e) => handleChange('amount', parseFloat(e.target.value) || 0)}
               placeholder="0.00"
               className="bg-slate-900/70 border-slate-800/80 text-white"
               required
@@ -137,9 +138,9 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type">Type</Label>
+            <Label htmlFor="edit-type">Type</Label>
             <select
-              id="type"
+              id="edit-type"
               value={formData.type}
               onChange={(e) => handleChange('type', e.target.value as TransactionType)}
               className="w-full px-3 py-2 rounded-lg border border-slate-800/80 bg-slate-900/70 text-slate-300 text-sm focus:border-slate-600 focus:outline-none cursor-pointer"
@@ -151,9 +152,9 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category">Category</Label>
+            <Label htmlFor="edit-category">Category</Label>
             <select
-              id="category"
+              id="edit-category"
               value={formData.category}
               onChange={(e) => handleChange('category', e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-slate-800/80 bg-slate-900/70 text-slate-300 text-sm focus:border-slate-600 focus:outline-none cursor-pointer"
@@ -168,9 +169,9 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="date">Date</Label>
+            <Label htmlFor="edit-date">Date</Label>
             <Input
-              id="date"
+              id="edit-date"
               type="date"
               value={formData.date}
               onChange={(e) => handleChange('date', e.target.value)}
@@ -182,9 +183,9 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="description">Description (Optional)</Label>
+            <Label htmlFor="edit-description">Description (Optional)</Label>
             <Input
-              id="description"
+              id="edit-description"
               value={formData.description || ''}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Additional notes..."
@@ -200,13 +201,12 @@ export function AddTransactionForm({ onSubmit, onCancel, isLoading }: AddTransac
           </div>
         </div>
 
-
         <div className="flex gap-2 justify-end">
           <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Creating...' : 'Create Transaction'}
+            {isLoading ? 'Updating...' : 'Update Transaction'}
           </Button>
         </div>
       </form>

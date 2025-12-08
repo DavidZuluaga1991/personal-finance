@@ -75,7 +75,7 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
                   {onEdit && (
                     <button
                       onClick={() => onEdit(transaction.id)}
-                      className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-blue-500 transition-colors"
+                      className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-blue-500 transition-colors cursor-pointer"
                       title="Edit"
                     >
                       <Edit2 size={16} />
@@ -83,7 +83,7 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
                   )}
                   <button
                     onClick={() => onDelete(transaction.id)}
-                    className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-red-500 transition-colors"
+                    className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
                     title="Delete"
                   >
                     <Trash2 size={16} />

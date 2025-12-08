@@ -23,7 +23,7 @@ export function Header({ title }: HeaderProps) {
           <span className="text-sm text-slate-400">Welcome, {user?.name || 'User'}</span>
           <button
             onClick={logout}
-            className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+            className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white cursor-pointer"
             title="Logout"
           >
             <LogOut size={20} />
