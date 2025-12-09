@@ -8,6 +8,7 @@ interface TransactionState {
   add: (item: Transaction) => void;
   update: (id: string, item: Partial<Transaction>) => void;
   remove: (id: string) => void;
+  clearList: () => void;
 }
 
 export const useTransactionStore = create<TransactionState>()(
@@ -29,6 +30,7 @@ export const useTransactionStore = create<TransactionState>()(
         set((state) => ({
           list: state.list.filter((t) => t.id !== id),
         })),
+      clearList: () => set({ list: [] }),
     }),
     {
       name: 'transaction-storage',
