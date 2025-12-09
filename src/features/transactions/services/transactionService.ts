@@ -5,6 +5,7 @@ import { Transaction, TransactionFormData } from '../types/transaction.types';
 export const transactionService = {
   list: async (): Promise<Transaction[]> => {
     const response = await apiClient.get<Transaction[]>(endpoints.transactions.list);
+    console.log(response);
     return response.data;
   },
 

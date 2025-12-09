@@ -41,12 +41,12 @@ export default function DashboardPage() {
 
   const summary = useMemo(() => {
     const totalIncome = list
-      .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + Number(t.amount), 0);
+      ?.filter((t) => t.type === 'income')
+      ?.reduce((sum, t) => sum + Number(t.amount), 0);
 
     const totalExpenses = list
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + Number(t.amount), 0);
+      ?.filter((t) => t.type === 'expense')
+      ?.reduce((sum, t) => sum + Number(t.amount), 0);
 
     const netBalance = totalIncome - totalExpenses;
     const savingsRate = totalIncome > 0 ? (((totalIncome - totalExpenses) / totalIncome) * 100).toFixed(1) : '0';
@@ -60,7 +60,7 @@ export default function DashboardPage() {
   }, [list]);
 
   const filteredTransactions = useMemo(() => {
-    const filtered = filterType === 'all' ? list : list.filter((t) => t.type === filterType);
+    const filtered = filterType === 'all' ? list : list?.filter((t) => t.type === filterType);
 
     return filtered.sort((a, b) => {
       let compareValue = 0;

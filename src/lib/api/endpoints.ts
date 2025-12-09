@@ -1,5 +1,6 @@
 const getApiBase = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  console.log(apiUrl)
   if (apiUrl) {
     return '';
   }
