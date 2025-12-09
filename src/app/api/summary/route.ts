@@ -5,7 +5,7 @@ import { Permission } from '@/features/auth/types/auth.types';
 import { UserRole } from '@/features/auth/types/auth.types';
 
 export async function GET(request: NextRequest) {
-  const { user, error } = requireAuth(request, Permission.SUMMARY_VIEW_OWN);
+  const { user, error } = requireAuth(request);
   if (error) return error;
   if (!user) {
     return NextResponse.json({ message: 'No autorizado' }, { status: 401 });

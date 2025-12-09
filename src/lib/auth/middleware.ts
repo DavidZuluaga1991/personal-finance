@@ -48,11 +48,13 @@ export function requireAuth(
       role: (decoded.role as UserRole) || UserRole.USER,
     };
 
-    if (requiredPermission && !hasPermission(user as any, requiredPermission)) {
-      return {
-        user: null,
-        error: NextResponse.json({ message: 'Permisos insuficientes' }, { status: 403 }),
-      };
+    if (requiredPermission && user.role !== UserRole.ADMIN && user.role !== 'admin') {
+      if (!hasPermission(user as any, requiredPermission)) {
+        return {
+          user: null,
+          error: NextResponse.json({ message: 'Permisos insuficientes' }, { status: 403 }),
+        };
+      }
     }
 
     return { user };

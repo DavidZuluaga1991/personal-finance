@@ -46,6 +46,8 @@ class ApiClient {
         const error: ApiError = await response.json().catch(() => ({
           message: response.statusText,
         }));
+        // Agregar el status code al error para facilitar la detección
+        (error as any).status = response.status;
         throw error;
       }
 
