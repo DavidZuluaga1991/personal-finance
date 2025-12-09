@@ -2,6 +2,8 @@
 
 import { Filter, ArrowUpDown, Plus } from 'lucide-react';
 import type { TransactionType, SortField, SortOrder } from '../types/transaction.types';
+import { PermissionGuard } from '@/components/auth/PermissionGuard';
+import { Permission } from '@/features/auth/types/auth.types';
 
 interface TransactionFiltersProps {
   filterType: TransactionType | 'all';
@@ -70,13 +72,15 @@ export function TransactionFilters({
           {sortOrder === 'desc' ? '↓ Desc' : '↑ Asc'}
         </button>
 
-        <button
-          onClick={onAddClick}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all duration-200 flex items-center gap-2 justify-center hover:shadow-md hover:shadow-blue-500/30 cursor-pointer"
-        >
-          <Plus size={16} />
-          Add Transaction
-        </button>
+            <PermissionGuard permission={Permission.TRANSACTIONS_CREATE}>
+              <button
+                onClick={onAddClick}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-all duration-200 flex items-center gap-2 justify-center hover:shadow-md hover:shadow-blue-500/30 cursor-pointer"
+              >
+                <Plus size={16} />
+                Add Transaction
+              </button>
+            </PermissionGuard>
       </div>
     </div>
   );

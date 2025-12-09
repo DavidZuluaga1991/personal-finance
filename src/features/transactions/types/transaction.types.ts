@@ -5,6 +5,7 @@ export type TransactionCategory = typeof TRANSACTION_CATEGORIES[keyof typeof TRA
 
 export interface Transaction {
   id: string;
+  userId?: number;
   title: string;
   amount: number;
   type: TransactionType;

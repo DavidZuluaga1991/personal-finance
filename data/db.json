@@ -5,12 +5,66 @@
       "email": "admin@test.com",
       "password": "123456",
       "name": "Administrador",
-      "avatar": "https://i.pravatar.cc/150?img=1"
+      "role": "admin",
+      "permissions": [],
+      "avatar": "https://i.pravatar.cc/150?img=1",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "email": "user@test.com",
+      "password": "123456",
+      "name": "Usuario Estándar",
+      "role": "user",
+      "permissions": [],
+      "avatar": "https://i.pravatar.cc/150?img=2",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "email": "viewer@test.com",
+      "password": "123456",
+      "name": "Usuario Viewer",
+      "role": "viewer",
+      "permissions": [],
+      "avatar": "https://i.pravatar.cc/150?img=3",
+      "createdAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": 4,
+      "email": "manager@test.com",
+      "password": "123456",
+      "name": "Manager",
+      "role": "user",
+      "permissions": ["transactions:view:all", "summary:view:all"],
+      "avatar": "https://i.pravatar.cc/150?img=4",
+      "createdAt": "2024-01-03T00:00:00Z"
+    },
+    {
+      "id": 5,
+      "email": "editor@test.com",
+      "password": "123456",
+      "name": "Editor",
+      "role": "user",
+      "permissions": ["transactions:edit:all"],
+      "avatar": "https://i.pravatar.cc/150?img=5",
+      "createdAt": "2024-01-04T00:00:00Z"
+    },
+    {
+      "id": 6,
+      "email": "guest@test.com",
+      "password": "123456",
+      "name": "Invitado",
+      "role": "guest",
+      "permissions": [],
+      "avatar": "https://i.pravatar.cc/150?img=6",
+      "createdAt": "2024-01-05T00:00:00Z"
     }
   ],
   "transactions": [
     {
       "id": "t1",
+      "userId": 2,
       "title": "Monthly Salary",
       "amount": 3500,
       "type": "income",
@@ -19,6 +73,7 @@
     },
     {
       "id": "t2",
+      "userId": 2,
       "title": "Restaurant dinner",
       "amount": 45,
       "type": "expense",
@@ -27,6 +82,7 @@
     },
     {
       "id": "t3",
+      "userId": 2,
       "title": "Uber ride",
       "amount": 18,
       "type": "expense",
@@ -35,6 +91,7 @@
     },
     {
       "id": "t4",
+      "userId": 2,
       "title": "Netflix subscription",
       "amount": 15,
       "type": "expense",
@@ -43,6 +100,7 @@
     },
     {
       "id": "t5",
+      "userId": 2,
       "title": "Freelance project",
       "amount": 800,
       "type": "income",
@@ -51,6 +109,7 @@
     },
     {
       "id": "t6",
+      "userId": 2,
       "title": "Grocery shopping",
       "amount": 120,
       "type": "expense",
@@ -59,6 +118,7 @@
     },
     {
       "id": "t1765249540609",
+      "userId": 2,
       "title": "asdasd",
       "amount": 341234,
       "type": "income",
@@ -66,6 +126,60 @@
       "date": "2025-12-09",
       "createdAt": "2025-12-09T03:05:40.609Z",
       "updatedAt": "2025-12-09T03:05:40.609Z"
+    },
+    {
+      "id": "t7",
+      "userId": 3,
+      "title": "Part-time job",
+      "amount": 1200,
+      "type": "income",
+      "category": "salary",
+      "date": "2024-01-08"
+    },
+    {
+      "id": "t8",
+      "userId": 3,
+      "title": "Coffee shop",
+      "amount": 8,
+      "type": "expense",
+      "category": "food",
+      "date": "2024-01-12"
+    },
+    {
+      "id": "t9",
+      "userId": 4,
+      "title": "Manager Salary",
+      "amount": 5000,
+      "type": "income",
+      "category": "salary",
+      "date": "2024-01-01"
+    },
+    {
+      "id": "t10",
+      "userId": 4,
+      "title": "Team lunch",
+      "amount": 150,
+      "type": "expense",
+      "category": "food",
+      "date": "2024-01-18"
+    },
+    {
+      "id": "t11",
+      "userId": 5,
+      "title": "Editor Salary",
+      "amount": 2800,
+      "type": "income",
+      "category": "salary",
+      "date": "2024-01-01"
+    },
+    {
+      "id": "t12",
+      "userId": 5,
+      "title": "Software license",
+      "amount": 99,
+      "type": "expense",
+      "category": "subscriptions",
+      "date": "2024-01-14"
     }
   ]
 }

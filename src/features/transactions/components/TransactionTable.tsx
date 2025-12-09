@@ -5,6 +5,10 @@ import type { Transaction } from '../types/transaction.types';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { CATEGORY_LABELS } from '@/lib/utils/constants';
+import { PermissionGuard } from '@/components/auth/PermissionGuard';
+import { Permission } from '@/features/auth/types/auth.types';
+import { useAuthStore } from '@/lib/store/slices/authSlice';
+import { canEditTransaction, canDeleteTransaction } from '@/lib/auth/permissions';
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -13,6 +17,8 @@ interface TransactionTableProps {
 }
 
 export function TransactionTable({ transactions, onEdit, onDelete }: TransactionTableProps) {
+  const user = useAuthStore((state) => state.user);
+
   if (transactions.length === 0) {
     return (
       <div className="text-center py-12">
@@ -72,7 +78,7 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
               <td className="px-4 py-4 text-sm text-slate-400">{formatDate(transaction.date)}</td>
               <td className="px-4 py-4 text-right">
                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {onEdit && (
+                  {onEdit && user && canEditTransaction(user, transaction.userId) && (
                     <button
                       onClick={() => onEdit(transaction.id)}
                       className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-blue-500 transition-colors cursor-pointer"
@@ -81,13 +87,15 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
                       <Edit2 size={16} />
                     </button>
                   )}
-                  <button
-                    onClick={() => onDelete(transaction.id)}
-                    className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
-                    title="Delete"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  {user && canDeleteTransaction(user, transaction.userId) && (
+                    <button
+                      onClick={() => onDelete(transaction.id)}
+                      className="p-1.5 rounded hover:bg-slate-700/50 text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>

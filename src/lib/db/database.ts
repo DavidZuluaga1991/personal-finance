@@ -8,11 +8,15 @@ interface User {
   email: string;
   password: string;
   name?: string;
+  role?: string;
+  permissions?: string[];
   avatar?: string;
+  createdAt?: string;
 }
 
 interface Transaction {
   id: string;
+  userId?: number;
   title: string;
   amount: number;
   type: 'income' | 'expense';

@@ -75,12 +75,17 @@ export function Sidebar() {
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600/20 border border-blue-600/40">
             <User size={16} className="text-blue-400" />
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-white truncate">
-              {user?.name || 'User'}
-            </p>
-            <p className="text-xs text-slate-400 truncate">{user?.email || ''}</p>
-          </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-white truncate">
+                  {user?.name || 'User'}
+                </p>
+                <p className="text-xs text-slate-400 truncate">{user?.email || ''}</p>
+                {user?.role && (
+                  <p className="text-xs text-blue-400 font-medium mt-0.5">
+                    {user.role === 'admin' ? 'Administrator' : user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                  </p>
+                )}
+              </div>
         </div>
 
         <button
