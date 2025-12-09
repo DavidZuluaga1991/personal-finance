@@ -104,10 +104,10 @@ export function EditTransactionForm({
   };
 
   return (
-    <div className="mb-6 p-4 rounded-lg bg-slate-900/60 border border-slate-800/80">
+    <div className="mb-6 p-3 sm:p-4 rounded-lg bg-slate-900/60 border border-slate-800/80">
       <h4 className="text-sm font-semibold text-white mb-4">Edit Transaction</h4>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-2">
             <Label htmlFor="edit-title">Title</Label>
             <Input
@@ -168,7 +168,7 @@ export function EditTransactionForm({
             {errors.category && <ErrorMessage message={errors.category} />}
           </div>
 
-          <div className="space-y-2 md:col-span-2">
+          <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="edit-date">Date</Label>
             <Input
               id="edit-date"
@@ -182,7 +182,7 @@ export function EditTransactionForm({
             {errors.date && <ErrorMessage message={errors.date} />}
           </div>
 
-          <div className="space-y-2 md:col-span-2">
+          <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="edit-description">Description (Optional)</Label>
             <Input
               id="edit-description"
@@ -201,11 +201,11 @@ export function EditTransactionForm({
           </div>
         </div>
 
-        <div className="flex gap-2 justify-end">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+        <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
             {isLoading ? 'Updating...' : 'Update Transaction'}
           </Button>
         </div>

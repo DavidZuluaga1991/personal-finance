@@ -39,7 +39,7 @@ export function Modal({
         onClick={onClose}
       />
       <div className="relative z-50 w-full max-w-md mx-4 bg-slate-900/95 border border-slate-700/60 rounded-xl shadow-2xl">
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">{title}</h3>
             <button
@@ -50,23 +50,23 @@ export function Modal({
             </button>
           </div>
           <p className="text-sm text-slate-300 mb-6">{description}</p>
-          <div className="flex gap-3 justify-end">
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-slate-700/60 bg-slate-900/60 text-slate-300 hover:bg-slate-800/60"
+              className="w-full sm:w-auto border-slate-700/60 bg-slate-900/60 text-slate-300 hover:bg-slate-800/60"
             >
               {cancelText}
             </Button>
             <Button
               type="button"
               onClick={handleConfirm}
-              className={
+              className={`w-full sm:w-auto ${
                 variant === 'destructive'
                   ? 'bg-red-600 hover:bg-red-700 text-white'
                   : 'bg-blue-600 hover:bg-blue-700 text-white'
-              }
+              }`}
             >
               {confirmText}
             </Button>

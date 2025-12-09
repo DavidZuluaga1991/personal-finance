@@ -128,20 +128,22 @@ export default function DashboardPage() {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="min-h-screen dashboard-gradient flex">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 flex flex-col ml-64">
-        <Header title="Dashboard" />
+      <div className="flex-1 flex flex-col lg:ml-64">
+        <Header title="Dashboard" onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 px-6 py-8 overflow-auto">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold text-white mb-2">Dashboard</h3>
-            <p className="text-slate-400">Manage your income and expenses</p>
+        <main className="flex-1 px-4 sm:px-6 py-6 sm:py-8 overflow-auto">
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Dashboard</h3>
+            <p className="text-sm sm:text-base text-slate-400">Manage your income and expenses</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <SummaryCard
               label="Total Income"
               value={formatCurrency(summary.totalIncome)}
@@ -164,7 +166,7 @@ export default function DashboardPage() {
             />
           </div>
 
-          <div className="card-glass rounded-xl p-6">
+          <div className="card-glass rounded-xl p-4 sm:p-6">
             <TransactionFilters
               filterType={filterType}
               sortField={sortField}

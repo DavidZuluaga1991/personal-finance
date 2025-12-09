@@ -54,16 +54,16 @@ export default function SummaryCard({
 
   return (
     <div
-      className={`summary-card-hover rounded-xl border border-slate-800/80 bg-slate-900/60 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40 p-6 ${getBorderClass()} ${
+      className={`summary-card-hover rounded-xl border border-slate-800/80 bg-slate-900/60 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40 p-4 sm:p-6 ${getBorderClass()} ${
         isHighlighted ? 'bg-blue-600/10' : ''
       }`}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-slate-400">{label}</h3>
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="text-xs sm:text-sm font-medium text-slate-400">{label}</h3>
         {getIcon()}
       </div>
       <p
-        className={`text-3xl font-bold mb-1 ${
+        className={`text-2xl sm:text-3xl font-bold mb-1 ${
           valueColor === 'green'
             ? 'text-green-500'
             : valueColor === 'red'

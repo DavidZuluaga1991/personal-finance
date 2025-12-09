@@ -1,6 +1,7 @@
 'use client';
 
-import { Home, BarChart3, CreditCard, Settings, User, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { Home, BarChart3, CreditCard, Settings, User, LogOut, X } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/slices/authSlice';
 import { useLogout } from '@/features/auth/hooks/useLogout';
 import Link from 'next/link';
@@ -22,7 +23,12 @@ const navItems: NavItemConfig[] = [
   { id: 'settings', label: 'Settings', icon: Settings, href: '/settings' },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const user = useAuthStore((s) => s.user);
   const logout = useLogout();
   const pathname = usePathname();
@@ -37,14 +43,44 @@ export function Sidebar() {
 
   const activeNav = getActiveNav();
 
+  const handleLinkClick = () => {
+    if (onClose && window.innerWidth < 1024) {
+      onClose();
+    }
+  };
+
   return (
-    <aside className="dashboard-gradient sidebar-backdrop fixed left-0 top-0 h-screen w-64 border-r border-slate-900/80 flex flex-col z-50">
+    <>
+      {/* Overlay para mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`dashboard-gradient sidebar-backdrop fixed left-0 top-0 h-screen w-64 border-r border-slate-900/80 flex flex-col z-50 transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0`}
+      >
       <div className="px-6 py-6 border-b border-slate-900/50">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-lg">
-            P
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-lg">
+              P
+            </div>
+            <h1 className="text-lg font-bold text-white">FinanceTracker</h1>
           </div>
-          <h1 className="text-lg font-bold text-white">FinanceTracker</h1>
+          {/* Botón cerrar solo en mobile */}
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
         </div>
       </div>
 
@@ -57,6 +93,7 @@ export function Sidebar() {
             <Link
               key={item.id}
               href={item.href}
+              onClick={handleLinkClick}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium cursor-pointer ${
                 isActive
                   ? 'bg-blue-600/20 text-blue-400 border border-blue-600/40'
@@ -97,6 +134,7 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }
 

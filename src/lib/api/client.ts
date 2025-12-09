@@ -62,12 +62,19 @@ class ApiClient {
   private getAuthToken(): string | null {
     if (typeof window === 'undefined') return null;
     try {
+      // Intentar leer directamente del localStorage primero (más rápido)
       const authStorage = localStorage.getItem('auth-storage');
       if (authStorage) {
         const parsed = JSON.parse(authStorage);
-        return parsed?.state?.token || null;
+        const token = parsed?.state?.token;
+        // Verificar que el token existe y no está vacío
+        if (token && typeof token === 'string' && token.trim().length > 0) {
+          return token;
+        }
       }
-    } catch {
+    } catch (error) {
+      // Si hay un error parseando, retornar null
+      console.warn('Error reading auth token from localStorage:', error);
       return null;
     }
     return null;

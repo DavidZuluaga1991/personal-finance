@@ -80,13 +80,13 @@ interface ToastContainerProps {
   onClose: (id: string) => void;
 }
 
-export function ToastContainer({ toasts, onClose }: ToastContainerProps) {
-  return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md w-full">
-      {toasts.map((toast) => (
-        <ToastComponent key={toast.id} toast={toast} onClose={onClose} />
-      ))}
-    </div>
-  );
-}
+    export function ToastContainer({ toasts, onClose }: ToastContainerProps) {
+      return (
+        <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-md w-full px-4 sm:px-0">
+          {toasts.map((toast) => (
+            <ToastComponent key={toast.id} toast={toast} onClose={onClose} />
+          ))}
+        </div>
+      );
+    }
 

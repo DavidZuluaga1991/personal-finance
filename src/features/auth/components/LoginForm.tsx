@@ -47,11 +47,11 @@ export default function LoginForm() {
             </div>
             <span className="text-xl font-semibold">FinanceTracker</span>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">
             Take control of your{' '}
             <span className="text-blue-400">financial future</span>
           </h1>
-          <p className="text-lg text-slate-300 mb-8">
+          <p className="text-base sm:text-lg text-slate-300 mb-6 sm:mb-8">
             Manage your income and expenses with ease. Track your spending,
             set budgets, and achieve your financial goals.
           </p>
@@ -66,9 +66,9 @@ export default function LoginForm() {
         </div>
 
         <div className="flex-1 flex justify-center items-center max-w-md mx-auto lg:mx-0">
-          <div className="w-full bg-slate-900/70 backdrop-blur-lg border border-slate-700/60 rounded-2xl p-8 lg:p-10 shadow-2xl">
-            <h2 className="text-2xl font-bold mb-2 text-white">Welcome back</h2>
-            <p className="text-slate-400 mb-6">Sign in to your account</p>
+          <div className="w-full bg-slate-900/70 backdrop-blur-lg border border-slate-700/60 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 text-white">Welcome back</h2>
+            <p className="text-sm sm:text-base text-slate-400 mb-4 sm:mb-6">Sign in to your account</p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">

@@ -25,6 +25,23 @@ export function requireAuth(
 
   try {
     const decoded = parseJWT(token);
+    
+    // Validar que el token tiene la estructura correcta
+    if (!decoded || !decoded.sub || !decoded.email) {
+      return {
+        user: null,
+        error: NextResponse.json({ message: 'Token inválido: estructura incorrecta' }, { status: 401 }),
+      };
+    }
+
+    // Verificar expiración del token
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+      return {
+        user: null,
+        error: NextResponse.json({ message: 'Token expirado' }, { status: 401 }),
+      };
+    }
+
     const user: AuthUser = {
       id: decoded.sub as number,
       email: decoded.email as string,
@@ -39,7 +56,9 @@ export function requireAuth(
     }
 
     return { user };
-  } catch {
+  } catch (error) {
+    // Loggear el error para debugging pero no exponer detalles al cliente
+    console.error('Error parsing JWT:', error);
     return {
       user: null,
       error: NextResponse.json({ message: 'Token inválido' }, { status: 401 }),
