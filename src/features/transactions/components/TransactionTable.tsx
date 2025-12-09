@@ -29,7 +29,6 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
 
   return (
     <>
-      {/* Vista de tabla para desktop */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -106,7 +105,6 @@ export function TransactionTable({ transactions, onEdit, onDelete }: Transaction
         </table>
       </div>
 
-      {/* Vista de cards para mobile */}
       <div className="md:hidden space-y-3">
         {transactions.map((transaction) => (
           <div

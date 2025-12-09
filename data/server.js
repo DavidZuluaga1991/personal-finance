@@ -78,21 +78,21 @@ function requireAuth(req, requiredPermission) {
   const token = authHeader?.replace("Bearer ", "");
 
   if (!token) {
-    return { user: null, error: { status: 401, message: "No autorizado" } };
+    return { user: null, error: { status: 401, message: "Unauthorized" } };
   }
 
   try {
     const decoded = jwt.verify(token, SECRET);
 
     if (!decoded || !decoded.sub || !decoded.email) {
-      return { user: null, error: { status: 401, message: "Token inválido" } };
+      return { user: null, error: { status: 401, message: "Invalid token" } };
     }
 
     const db = router.db;
     const user = db.get("users").find({ id: decoded.sub }).value();
 
     if (!user) {
-      return { user: null, error: { status: 401, message: "Usuario no encontrado" } };
+      return { user: null, error: { status: 401, message: "User not found" } };
     }
 
     const authUser = {
@@ -103,15 +103,15 @@ function requireAuth(req, requiredPermission) {
     };
 
     if (requiredPermission && !isAdmin(authUser) && !hasPermission(authUser, requiredPermission)) {
-      return { user: null, error: { status: 403, message: "Permisos insuficientes" } };
+      return { user: null, error: { status: 403, message: "Insufficient permissions" } };
     }
 
     return { user: authUser, error: null };
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return { user: null, error: { status: 401, message: "Token expirado" } };
+      return { user: null, error: { status: 401, message: "Token expired" } };
     }
-    return { user: null, error: { status: 401, message: "Token inválido. Por favor, inicia sesión nuevamente." } };
+    return { user: null, error: { status: 401, message: "Invalid token. Please log in again." } };
   }
 }
 
@@ -138,14 +138,14 @@ server.post("/auth/login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "Email y contraseña son requeridos" });
+    return res.status(400).json({ message: "Email and password are required" });
   }
 
   const db = router.db;
   const user = db.get("users").find({ email, password }).value();
 
   if (!user) {
-    return res.status(401).json({ message: "Credenciales inválidas" });
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 
   const payload = {
@@ -168,7 +168,7 @@ server.post("/auth/login", (req, res) => {
       },
       token,
     },
-    message: "Login exitoso",
+    message: "Login successful",
   });
 });
 
@@ -180,7 +180,7 @@ server.get("/transactions", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const db = router.db;
@@ -192,7 +192,7 @@ server.get("/transactions", (req, res) => {
 
   res.json({
     data: transactions,
-    message: "Transacciones obtenidas exitosamente",
+    message: "Transactions retrieved successfully",
   });
 });
 
@@ -204,23 +204,23 @@ server.get("/transactions/:id", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const db = router.db;
   const transaction = db.get("transactions").find({ id: req.params.id }).value();
 
   if (!transaction) {
-    return res.status(404).json({ message: "Transacción no encontrada" });
+    return res.status(404).json({ message: "Transaction not found" });
   }
 
   if (!canViewTransaction(user, transaction.userId)) {
-    return res.status(403).json({ message: "No tienes permiso para ver esta transacción" });
+    return res.status(403).json({ message: "You do not have permission to view this transaction" });
   }
 
   res.json({
     data: transaction,
-    message: "Transacción obtenida exitosamente",
+    message: "Transaction retrieved successfully",
   });
 });
 
@@ -232,18 +232,18 @@ server.post("/transactions", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   if (!isAdmin(user) && !hasPermission(user, "transactions:create")) {
-    return res.status(403).json({ message: "Permisos insuficientes" });
+    return res.status(403).json({ message: "Insufficient permissions" });
   }
 
   const db = router.db;
   const { title, amount, type, category, date, description } = req.body;
 
   if (!title || amount === undefined || !type || !category || !date) {
-    return res.status(400).json({ message: "Campos requeridos: title, amount, type, category, date" });
+    return res.status(400).json({ message: "Required fields: title, amount, type, category, date" });
   }
 
   const newTransaction = {
@@ -263,7 +263,7 @@ server.post("/transactions", (req, res) => {
 
   res.status(201).json({
     data: newTransaction,
-    message: "Transacción creada exitosamente",
+    message: "Transaction created successfully",
   });
 });
 
@@ -275,18 +275,18 @@ server.put("/transactions/:id", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const db = router.db;
   const transaction = db.get("transactions").find({ id: req.params.id }).value();
 
   if (!transaction) {
-    return res.status(404).json({ message: "Transacción no encontrada" });
+    return res.status(404).json({ message: "Transaction not found" });
   }
 
   if (!canEditTransaction(user, transaction.userId)) {
-    return res.status(403).json({ message: "No tienes permiso para editar esta transacción" });
+    return res.status(403).json({ message: "You do not have permission to edit this transaction" });
   }
 
   const updated = {
@@ -301,7 +301,7 @@ server.put("/transactions/:id", (req, res) => {
 
   res.json({
     data: updated,
-    message: "Transacción actualizada exitosamente",
+    message: "Transaction updated successfully",
   });
 });
 
@@ -313,24 +313,24 @@ server.delete("/transactions/:id", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const db = router.db;
   const transaction = db.get("transactions").find({ id: req.params.id }).value();
 
   if (!transaction) {
-    return res.status(404).json({ message: "Transacción no encontrada" });
+    return res.status(404).json({ message: "Transaction not found" });
   }
 
   if (!canDeleteTransaction(user, transaction.userId)) {
-    return res.status(403).json({ message: "No tienes permiso para eliminar esta transacción" });
+    return res.status(403).json({ message: "You do not have permission to delete this transaction" });
   }
 
   db.get("transactions").remove({ id: req.params.id }).write();
 
   res.json({
-    message: "Transacción eliminada exitosamente",
+    message: "Transaction deleted successfully",
   });
 });
 
@@ -342,7 +342,7 @@ server.get("/summary", (req, res) => {
   }
 
   if (!user) {
-    return res.status(401).json({ message: "No autorizado" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const db = router.db;
@@ -368,7 +368,7 @@ server.get("/summary", (req, res) => {
       totalExpenses,
       netBalance,
     },
-    message: "Resumen obtenido exitosamente",
+    message: "Summary retrieved successfully",
   });
 });
 
@@ -383,7 +383,7 @@ server.use(router);
 
 server.listen(PORT, () => {
   console.log(`🚀 JSON Server RUNNING on http://localhost:${PORT}`);
-  console.log(`📝 Endpoints disponibles:`);
+  console.log(`📝 Available endpoints:`);
   console.log(`   POST   /auth/login`);
   console.log(`   GET    /transactions`);
   console.log(`   GET    /transactions/:id`);

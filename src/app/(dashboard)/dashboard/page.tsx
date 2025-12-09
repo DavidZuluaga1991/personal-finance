@@ -66,9 +66,63 @@ export default function DashboardPage() {
       let compareValue = 0;
 
       if (sortField === 'date') {
-        compareValue = new Date(b.date).getTime() - new Date(a.date).getTime();
+        const timeA = a.createdAt 
+          ? new Date(a.createdAt).getTime() 
+          : a.updatedAt 
+            ? new Date(a.updatedAt).getTime() 
+            : new Date(a.date).getTime();
+        
+        const timeB = b.createdAt 
+          ? new Date(b.createdAt).getTime() 
+          : b.updatedAt 
+            ? new Date(b.updatedAt).getTime() 
+            : new Date(b.date).getTime();
+        
+        compareValue = timeB - timeA;
+        
+        if (compareValue === 0) {
+          const titleA = a.title.toLowerCase();
+          const titleB = b.title.toLowerCase();
+          compareValue = titleA.localeCompare(titleB);
+        }
       } else if (sortField === 'amount') {
         compareValue = Math.abs(b.amount) - Math.abs(a.amount);
+        
+        if (compareValue === 0) {
+          const timeA = a.createdAt 
+            ? new Date(a.createdAt).getTime() 
+            : a.updatedAt 
+              ? new Date(a.updatedAt).getTime() 
+              : new Date(a.date).getTime();
+          
+          const timeB = b.createdAt 
+            ? new Date(b.createdAt).getTime() 
+            : b.updatedAt 
+              ? new Date(b.updatedAt).getTime() 
+              : new Date(b.date).getTime();
+          
+          compareValue = timeB - timeA;
+        }
+      } else if (sortField === 'title') {
+        const titleA = a.title.toLowerCase();
+        const titleB = b.title.toLowerCase();
+        compareValue = titleA.localeCompare(titleB);
+        
+        if (compareValue === 0) {
+          const timeA = a.createdAt 
+            ? new Date(a.createdAt).getTime() 
+            : a.updatedAt 
+              ? new Date(a.updatedAt).getTime() 
+              : new Date(a.date).getTime();
+          
+          const timeB = b.createdAt 
+            ? new Date(b.createdAt).getTime() 
+            : b.updatedAt 
+              ? new Date(b.updatedAt).getTime() 
+              : new Date(b.date).getTime();
+          
+          compareValue = timeB - timeA;
+        }
       }
 
       return sortOrder === 'desc' ? compareValue : -compareValue;
@@ -149,12 +203,14 @@ export default function DashboardPage() {
               value={formatCurrency(summary.totalIncome)}
               icon="income"
               subtitle={`+${summary.savingsRate}% savings rate`}
+              onClick={() => setFilterType('income')}
             />
             <SummaryCard
               label="Total Expenses"
               value={formatCurrency(summary.totalExpenses)}
               icon="expense"
               subtitle="Spent this month"
+              onClick={() => setFilterType('expense')}
             />
             <SummaryCard
               label="Net Balance"
@@ -163,6 +219,7 @@ export default function DashboardPage() {
               subtitle={summary.netBalance >= 0 ? 'Surplus' : 'Deficit'}
               isHighlighted
               valueColor={summary.netBalance >= 0 ? 'green' : 'red'}
+              onClick={() => setFilterType('all')}
             />
           </div>
 

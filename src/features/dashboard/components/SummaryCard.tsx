@@ -7,6 +7,7 @@ interface SummaryCardProps {
   subtitle?: string;
   isHighlighted?: boolean;
   valueColor?: 'red' | 'green';
+  onClick?: () => void;
 }
 
 export default function SummaryCard({
@@ -16,6 +17,7 @@ export default function SummaryCard({
   subtitle,
   isHighlighted = false,
   valueColor,
+  onClick,
 }: SummaryCardProps) {
   const getIcon = () => {
     if (icon === 'income') {
@@ -54,9 +56,10 @@ export default function SummaryCard({
 
   return (
     <div
-      className={`summary-card-hover rounded-xl border border-slate-800/80 bg-slate-900/60 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40 p-4 sm:p-6 ${getBorderClass()} ${
+      onClick={onClick}
+      className={`summary-card-hover rounded-xl border border-slate-800/80 bg-slate-900/60 backdrop-blur supports-backdrop-filter:bg-slate-900/40 p-4 sm:p-6 ${getBorderClass()} ${
         isHighlighted ? 'bg-blue-600/10' : ''
-      }`}
+      } ${onClick ? 'cursor-pointer transition-all duration-200' : ''}`}
     >
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-xs sm:text-sm font-medium text-slate-400">{label}</h3>

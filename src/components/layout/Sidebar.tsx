@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Home, BarChart3, CreditCard, Settings, User, LogOut, X } from 'lucide-react';
 import { useAuthStore } from '@/lib/store/slices/authSlice';
 import { useLogout } from '@/features/auth/hooks/useLogout';
@@ -51,7 +50,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay para mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
@@ -59,7 +57,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`dashboard-gradient sidebar-backdrop fixed left-0 top-0 h-screen w-64 border-r border-slate-900/80 flex flex-col z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -73,7 +70,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
             </div>
             <h1 className="text-lg font-bold text-white">FinanceTracker</h1>
           </div>
-          {/* Botón cerrar solo en mobile */}
           <button
             onClick={onClose}
             className="lg:hidden p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-white transition-colors cursor-pointer"

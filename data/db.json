@@ -218,6 +218,18 @@
       "userId": 1,
       "createdAt": "2025-12-09T06:42:20.828Z",
       "updatedAt": "2025-12-09T06:42:20.828Z"
+    },
+    {
+      "id": "t1765281282170",
+      "userId": 1,
+      "title": "agfdgdfgydfgdftrdt",
+      "amount": 341234,
+      "type": "expense",
+      "category": "other",
+      "date": "2025-12-09",
+      "description": "",
+      "createdAt": "2025-12-09T11:54:42.170Z",
+      "updatedAt": "2025-12-09T11:54:42.170Z"
     }
   ]
 }

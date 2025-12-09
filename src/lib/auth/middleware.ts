@@ -19,26 +19,24 @@ export function requireAuth(
   if (!token) {
     return {
       user: null,
-      error: NextResponse.json({ message: 'No autorizado' }, { status: 401 }),
+      error: NextResponse.json({ message: 'Unauthorized' }, { status: 401 }),
     };
   }
 
   try {
     const decoded = parseJWT(token);
     
-    // Validar que el token tiene la estructura correcta
     if (!decoded || !decoded.sub || !decoded.email) {
       return {
         user: null,
-        error: NextResponse.json({ message: 'Token inválido: estructura incorrecta' }, { status: 401 }),
+        error: NextResponse.json({ message: 'Invalid token: incorrect structure' }, { status: 401 }),
       };
     }
 
-    // Verificar expiración del token
     if (decoded.exp && Date.now() >= decoded.exp * 1000) {
       return {
         user: null,
-        error: NextResponse.json({ message: 'Token expirado' }, { status: 401 }),
+        error: NextResponse.json({ message: 'Token expired' }, { status: 401 }),
       };
     }
 
@@ -52,18 +50,17 @@ export function requireAuth(
       if (!hasPermission(user as any, requiredPermission)) {
         return {
           user: null,
-          error: NextResponse.json({ message: 'Permisos insuficientes' }, { status: 403 }),
+          error: NextResponse.json({ message: 'Insufficient permissions' }, { status: 403 }),
         };
       }
     }
 
     return { user };
   } catch (error) {
-    // Loggear el error para debugging pero no exponer detalles al cliente
     console.error('Error parsing JWT:', error);
     return {
       user: null,
-      error: NextResponse.json({ message: 'Token inválido' }, { status: 401 }),
+      error: NextResponse.json({ message: 'Invalid token' }, { status: 401 }),
     };
   }
 }

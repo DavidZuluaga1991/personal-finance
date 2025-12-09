@@ -17,7 +17,6 @@ export function Header({ title, onMenuClick }: HeaderProps) {
     <header className="dashboard-gradient sidebar-backdrop sticky top-0 z-40 border-b border-slate-900/80">
       <div className="px-4 sm:px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* Botón hamburguesa solo en mobile */}
           <button
             onClick={onMenuClick}
             className="lg:hidden p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-white transition-colors cursor-pointer"

@@ -41,10 +41,10 @@ export const useGetTransactions = () => {
           apiError?.status === 403 ||
           err?.message?.includes('403') ||
           err?.message?.includes('401') ||
-          err?.message?.includes('No autorizado') ||
-          err?.message?.includes('Permisos insuficientes') ||
-          err?.message?.includes('Token inválido') ||
-          err?.message?.includes('Token expirado');
+          err?.message?.includes('Unauthorized') ||
+          err?.message?.includes('Insufficient permissions') ||
+          err?.message?.includes('Invalid token') ||
+          err?.message?.includes('Token expired');
 
         if (apiError?.status === 401 && mounted) {
           window.location.href = '/login';

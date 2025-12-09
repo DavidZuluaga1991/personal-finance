@@ -26,7 +26,7 @@ export default function LoginForm() {
         await login(formData);
         showSuccess('Login successful', 'Welcome back!');
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Error de login';
+        const errorMessage = err instanceof Error ? err.message : 'Login error';
         setError(errorMessage);
         showError('Login failed', errorMessage);
       }
