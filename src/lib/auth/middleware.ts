@@ -46,7 +46,7 @@ export function requireAuth(
       role: (decoded.role as UserRole) || UserRole.USER,
     };
 
-    if (requiredPermission && user.role !== UserRole.ADMIN && user.role !== 'admin') {
+    if (requiredPermission && user.role !== UserRole.ADMIN) {
       if (!hasPermission(user as any, requiredPermission)) {
         return {
           user: null,

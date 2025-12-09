@@ -1,6 +1,15 @@
 version: "3.9"
 
 services:
+  backend:
+    build: ./data
+    container_name: json-backend
+    ports:
+      - "3003:3003"
+    environment:
+      - JWT_SECRET=dev-secret-key
+    restart: always
+
   nextjs:
     container_name: Personal-finance
     build:
@@ -10,5 +19,7 @@ services:
       - "3010:3000"
     env_file:
       - .env.local
+    depends_on:
+      - backend
     environment:
       - NODE_ENV=development

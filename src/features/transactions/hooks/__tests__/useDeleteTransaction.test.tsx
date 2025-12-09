@@ -8,10 +8,11 @@ jest.mock('@/lib/store/slices/transactionSlice');
 
 describe('useDeleteTransaction', () => {
   const mockRemove = jest.fn();
+  const mockUseTransactionStore = useTransactionStore as jest.MockedFunction<typeof useTransactionStore>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useTransactionStore as jest.Mock).mockImplementation((selector) => {
+    mockUseTransactionStore.mockImplementation((selector) => {
       const state = {
         remove: mockRemove,
       };

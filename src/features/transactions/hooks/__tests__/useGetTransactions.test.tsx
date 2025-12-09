@@ -1,88 +1,130 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useGetTransactions } from '../useGetTransactions';
+import { transactionService } from '../../services/transactionService';
 import { useTransactionStore } from '@/lib/store/slices/transactionSlice';
 import { useAuthStore } from '@/lib/store/slices/authSlice';
-import { transactionService } from '../../services/transactionService';
 
-jest.mock('@/lib/store/slices/transactionSlice');
-jest.mock('@/lib/store/slices/authSlice');
-jest.mock('../../services/transactionService');
+// Mock del service
+jest.mock('../../services/transactionService', () => ({
+  transactionService: {
+    list: jest.fn(),
+  },
+}));
+
+// Mock stores de Zustand
+jest.mock('@/lib/store/slices/transactionSlice', () => ({
+  useTransactionStore: jest.fn(),
+}));
+
+jest.mock('@/lib/store/slices/authSlice', () => ({
+  useAuthStore: jest.fn(),
+}));
 
 describe('useGetTransactions', () => {
-  const mockSetList = jest.fn();
+  let setListMock: jest.Mock;
 
   beforeEach(() => {
+    setListMock = jest.fn();
+
+    (useTransactionStore as unknown as jest.Mock).mockReturnValue(setListMock);
+
     jest.clearAllMocks();
-    (useTransactionStore as jest.Mock).mockReturnValue({
-      setList: mockSetList,
-    });
-    (useAuthStore as jest.Mock).mockReturnValue({
-      token: 'test-token',
-      hasHydrated: true,
-      user: { id: 1, email: 'test@example.com' },
-    });
   });
 
-  it('should fetch and set transactions when hydrated', async () => {
-    const mockTransactions = [
-      {
-        id: 't1',
-        userId: 1,
-        title: 'Test Transaction',
-        amount: 100,
-        type: 'expense',
-        category: 'food',
-        date: '2024-01-15',
-      },
-    ];
+  const mockAuthState = ({
+    token = null,
+    hasHydrated = true,
+    user = null
+  } = {}) => {
+    (useAuthStore as unknown as jest.Mock).mockImplementation((selector) =>
+      selector({
+        token,
+        _hasHydrated: hasHydrated,
+        user,
+      })
+    );
+  };
 
-    (transactionService.list as jest.Mock).mockResolvedValue(mockTransactions);
-
-    renderHook(() => useGetTransactions());
-
-    await waitFor(() => {
-      expect(transactionService.list).toHaveBeenCalled();
-      expect(mockSetList).toHaveBeenCalledWith(mockTransactions);
-    });
-  });
-
-  it('should not fetch if not hydrated', () => {
-    (useAuthStore as jest.Mock).mockReturnValue({
-      token: 'test-token',
-      hasHydrated: false,
-      user: { id: 1, email: 'test@example.com' },
-    });
+  it('should NOT fetch if no token', () => {
+    mockAuthState({ token: null, user: { id: 1 } });
 
     renderHook(() => useGetTransactions());
 
     expect(transactionService.list).not.toHaveBeenCalled();
   });
 
-  it('should not fetch if no token', () => {
-    (useAuthStore as jest.Mock).mockReturnValue({
-      token: null,
-      hasHydrated: true,
-      user: null,
-    });
+  it('should NOT fetch if no user', () => {
+    mockAuthState({ token: 'abc123', user: null });
 
     renderHook(() => useGetTransactions());
 
     expect(transactionService.list).not.toHaveBeenCalled();
   });
 
-  it('should handle fetch errors gracefully', async () => {
-    const error = new Error('Network error');
+  it('should NOT fetch if not hydrated', () => {
+    mockAuthState({ hasHydrated: false, token: 'abc', user: { id: 1 } });
+
+    renderHook(() => useGetTransactions());
+
+    expect(transactionService.list).not.toHaveBeenCalled();
+  });
+
+  it('should fetch when hydrated + token + user', async () => {
+    mockAuthState({ token: 'abc', user: { id: 1 }, hasHydrated: true });
+    const fakeData = [{ id: 1 }];
+
+    (transactionService.list as jest.Mock).mockResolvedValue(fakeData);
+
+    await act(async () => {
+      renderHook(() => useGetTransactions());
+    });
+
+    expect(transactionService.list).toHaveBeenCalledTimes(1);
+    expect(setListMock).toHaveBeenCalledWith(fakeData);
+  });
+
+  it('should handle non-auth errors gracefully', async () => {
+    mockAuthState({ token: 'abc', user: { id: 1 } });
+
+    const error = new Error('Something failed');
+
     (transactionService.list as jest.Mock).mockRejectedValue(error);
 
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-    renderHook(() => useGetTransactions());
-
-    await waitFor(() => {
-      expect(transactionService.list).toHaveBeenCalled();
+    await act(async () => {
+      renderHook(() => useGetTransactions());
     });
 
-    consoleErrorSpy.mockRestore();
+    // Nunca debe romper
+    expect(transactionService.list).toHaveBeenCalled();
+  });
+
+  it('should redirect on 401 auth error', async () => {
+    mockAuthState({ token: 'abc', user: { id: 1 } });
+
+    delete (window as any).location;
+    (window as any).location = { href: '' };
+
+    (transactionService.list as jest.Mock).mockRejectedValue({ status: 401 });
+
+    await act(async () => {
+      renderHook(() => useGetTransactions());
+    });
+
+    expect(window.location.href).toBe('/login');
+  });
+
+  it('should NOT call list() multiple times due to ref', async () => {
+    mockAuthState({ token: 'abc', user: { id: 1 }, hasHydrated: true });
+
+    const fakeData = [{ id: 1 }];
+    (transactionService.list as jest.Mock).mockResolvedValue(fakeData);
+
+    const { rerender } = renderHook(() => useGetTransactions());
+
+    await act(async () => {
+      rerender();
+    });
+
+    expect(transactionService.list).toHaveBeenCalledTimes(1);
   });
 });
-

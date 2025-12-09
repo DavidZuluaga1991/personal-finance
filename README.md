@@ -67,6 +67,13 @@ npm run dev
 npm run json-server
 ```
 
+#### Opción 3: Ejecutar docker-compose
+
+**Docker compose**
+```bash
+docker-compose up -d
+```
+
 ### Acceder a la Aplicación
 
 1. Abrir el navegador en: `http://localhost:3000`
