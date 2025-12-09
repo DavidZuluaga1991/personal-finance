@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { mockDb } from '@/data/mock-db';
+import { db } from '@/lib/db/database';
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const transaction = mockDb.transactions.getById(id);
+  const transaction = await db.transactions.getById(id);
 
   if (!transaction) {
     return NextResponse.json(
@@ -28,7 +28,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const updated = mockDb.transactions.update(id, {
+    const updated = await db.transactions.update(id, {
       ...body,
       updatedAt: new Date().toISOString(),
     });
@@ -57,7 +57,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const deleted = mockDb.transactions.delete(id);
+  const deleted = await db.transactions.delete(id);
 
   if (!deleted) {
     return NextResponse.json(

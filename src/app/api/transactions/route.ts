@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { mockDb } from '@/data/mock-db';
+import { db } from '@/lib/db/database';
 
 export async function GET() {
-  const transactions = mockDb.transactions.getAll();
+  const transactions = await db.transactions.getAll();
   return NextResponse.json({
     data: transactions,
     message: 'Transacciones obtenidas exitosamente',
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       updatedAt: new Date().toISOString(),
     };
 
-    const created = mockDb.transactions.add(newTransaction);
+    const created = await db.transactions.add(newTransaction);
 
     return NextResponse.json({
       data: created,

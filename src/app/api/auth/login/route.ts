@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { mockDb } from '@/data/mock-db';
+import { db } from '@/lib/db/database';
 
 const SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, password } = body;
 
-    const user = mockDb.users.find((u) => u.email === email && u.password === password);
+    const user = await db.users.find((u) => u.email === email && u.password === password);
 
     if (!user) {
       return NextResponse.json(

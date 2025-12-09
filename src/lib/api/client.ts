@@ -5,7 +5,16 @@ class ApiClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = typeof window !== 'undefined' ? window.location.origin : '';
+    if (typeof window !== 'undefined') {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (apiUrl) {
+        this.baseURL = apiUrl;
+      } else {
+        this.baseURL = window.location.origin;
+      }
+    } else {
+      this.baseURL = process.env.NEXT_PUBLIC_API_URL || '';
+    }
   }
 
   private async request<T>(

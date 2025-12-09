@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { mockDb } from '@/data/mock-db';
+import { db } from '@/lib/db/database';
 
 export async function GET() {
-  const transactions = mockDb.transactions.getAll();
+  const transactions = await db.transactions.getAll();
 
   const totalIncome = transactions
     .filter((t) => t.type === 'income')

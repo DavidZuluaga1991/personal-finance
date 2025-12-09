@@ -1,4 +1,12 @@
-const API_BASE = '/api';
+const getApiBase = (): string => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (apiUrl) {
+    return '';
+  }
+  return '/api';
+};
+
+const API_BASE = getApiBase();
 
 export const endpoints = {
   auth: {

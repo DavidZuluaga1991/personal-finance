@@ -56,7 +56,16 @@
       "type": "expense",
       "category": "food",
       "date": "2024-01-20"
+    },
+    {
+      "id": "t1765249540609",
+      "title": "asdasd",
+      "amount": 341234,
+      "type": "income",
+      "category": "other",
+      "date": "2025-12-09",
+      "createdAt": "2025-12-09T03:05:40.609Z",
+      "updatedAt": "2025-12-09T03:05:40.609Z"
     }
   ]
 }
-
