@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     "jest.setup.js",
     // JSON Server
     "api/**",
+    "data/**",
   ]),
 ]);
 

@@ -13,17 +13,14 @@ export const useGetTransactions = () => {
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
-    // Esperar a que Zustand haya hidratado
     if (!hasHydrated) {
       return;
     }
 
-    // Si no hay token o usuario, no intentar hacer la petición
     if (!token || !user) {
       return;
     }
 
-    // Evitar múltiples peticiones simultáneas
     if (isFetchingRef.current) {
       return;
     }
@@ -38,19 +35,22 @@ export const useGetTransactions = () => {
           setList(data);
         }
       } catch (err: any) {
-        // Detectar errores de autenticación de diferentes formas
+        const apiError = err as any;
         const isAuthError = 
+          apiError?.status === 401 ||
+          apiError?.status === 403 ||
           err?.message?.includes('403') ||
           err?.message?.includes('401') ||
           err?.message?.includes('No autorizado') ||
           err?.message?.includes('Permisos insuficientes') ||
           err?.message?.includes('Token inválido') ||
-          err?.message?.includes('Token expirado') ||
-          (err?.response?.status === 401) ||
-          (err?.response?.status === 403);
+          err?.message?.includes('Token expirado');
 
-        // Solo loggear errores que NO sean de autenticación
-        // Los errores de autenticación son esperados durante la transición de login
+        if (apiError?.status === 401 && mounted) {
+          window.location.href = '/login';
+          return;
+        }
+
         if (!isAuthError && err?.message) {
           console.error('Error fetching transactions', err);
         }

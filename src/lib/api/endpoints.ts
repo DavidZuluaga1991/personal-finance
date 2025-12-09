@@ -1,10 +1,12 @@
+// JSON Server es el backend por defecto
+// Si NEXT_PUBLIC_API_URL está definido, usa esa URL
+// Si no, usa http://localhost:3003 (JSON Server por defecto)
 const getApiBase = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  console.log(apiUrl)
   if (apiUrl) {
-    return '';
+    return ''; // Endpoints relativos a la URL externa configurada
   }
-  return '/api';
+  return ''; // Endpoints relativos (el baseURL en client.ts manejará la URL)
 };
 
 const API_BASE = getApiBase();

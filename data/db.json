@@ -36,7 +36,10 @@
       "password": "123456",
       "name": "Manager",
       "role": "user",
-      "permissions": ["transactions:view:all", "summary:view:all"],
+      "permissions": [
+        "transactions:view:all",
+        "summary:view:all"
+      ],
       "avatar": "https://i.pravatar.cc/150?img=4",
       "createdAt": "2024-01-03T00:00:00Z"
     },
@@ -46,7 +49,9 @@
       "password": "123456",
       "name": "Editor",
       "role": "user",
-      "permissions": ["transactions:edit:all"],
+      "permissions": [
+        "transactions:edit:all"
+      ],
       "avatar": "https://i.pravatar.cc/150?img=5",
       "createdAt": "2024-01-04T00:00:00Z"
     },
@@ -180,6 +185,39 @@
       "type": "expense",
       "category": "subscriptions",
       "date": "2024-01-14"
+    },
+    {
+      "id": "t1765262481107",
+      "title": "Algho",
+      "amount": 123123,
+      "type": "expense",
+      "category": "other",
+      "date": "2025-12-09",
+      "userId": 1,
+      "createdAt": "2025-12-09T06:41:21.107Z",
+      "updatedAt": "2025-12-09T06:41:21.107Z"
+    },
+    {
+      "id": "t1765262521557",
+      "title": "Aas",
+      "amount": 300,
+      "type": "expense",
+      "category": "other",
+      "date": "2025-12-09",
+      "userId": 1,
+      "createdAt": "2025-12-09T06:42:01.557Z",
+      "updatedAt": "2025-12-09T06:42:01.557Z"
+    },
+    {
+      "id": "t1765262540828",
+      "title": "Aas",
+      "amount": 232323,
+      "type": "income",
+      "category": "other",
+      "date": "2025-12-09",
+      "userId": 1,
+      "createdAt": "2025-12-09T06:42:20.828Z",
+      "updatedAt": "2025-12-09T06:42:20.828Z"
     }
   ]
 }

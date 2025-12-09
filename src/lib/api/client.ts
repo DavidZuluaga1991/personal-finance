@@ -10,10 +10,10 @@ class ApiClient {
       if (apiUrl) {
         this.baseURL = apiUrl;
       } else {
-        this.baseURL = window.location.origin;
+        this.baseURL = 'http://localhost:3003';
       }
     } else {
-      this.baseURL = process.env.NEXT_PUBLIC_API_URL || '';
+      this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
     }
   }
 
@@ -46,8 +46,18 @@ class ApiClient {
         const error: ApiError = await response.json().catch(() => ({
           message: response.statusText,
         }));
-        // Agregar el status code al error para facilitar la detección
         (error as any).status = response.status;
+        
+        if (response.status === 401 && typeof window !== 'undefined') {
+          try {
+            const authStorage = localStorage.getItem('auth-storage');
+            if (authStorage) {
+              localStorage.removeItem('auth-storage');
+            }
+          } catch (e) {
+          }
+        }
+        
         throw error;
       }
 
@@ -64,18 +74,15 @@ class ApiClient {
   private getAuthToken(): string | null {
     if (typeof window === 'undefined') return null;
     try {
-      // Intentar leer directamente del localStorage primero (más rápido)
       const authStorage = localStorage.getItem('auth-storage');
       if (authStorage) {
         const parsed = JSON.parse(authStorage);
         const token = parsed?.state?.token;
-        // Verificar que el token existe y no está vacío
         if (token && typeof token === 'string' && token.trim().length > 0) {
           return token;
         }
       }
     } catch (error) {
-      // Si hay un error parseando, retornar null
       console.warn('Error reading auth token from localStorage:', error);
       return null;
     }
